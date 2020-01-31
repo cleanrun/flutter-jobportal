@@ -21,14 +21,15 @@ class _CompanyJobsCard extends State<CompanyJobsCard>{
       },
 
       child: Container(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Wrap(
           direction: Axis.vertical,
           children: <Widget>[
             Text(
               widget.name,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 13,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w600,
                 color: Colors.blue,
@@ -56,6 +57,8 @@ class _CompanyJobsCard extends State<CompanyJobsCard>{
                 color: Colors.grey[700],
               ),
             ),
+
+            Divider(),
 
           ],
         ),
