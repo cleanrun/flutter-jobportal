@@ -59,7 +59,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage>{
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.3,
           child: Image.asset(
-            'assets/accounting.jpg',
+            'assets/codex_logo.png',
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.3,
             fit: BoxFit.cover,

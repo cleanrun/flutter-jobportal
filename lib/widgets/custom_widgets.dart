@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
+import 'package:job_portal/utils/routes.dart';
+
 void showToast(String message, BuildContext context){
   Toast.show(message, context, duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
 }
@@ -29,21 +31,24 @@ class HomeDrawer extends StatelessWidget{
           leading: Icon(Icons.account_circle),
           title: Text('Account', style: TextStyle(fontFamily: 'Montserrat'),),
           onTap: () {
-            showToast("Account", context);
+            //showToast("Account", context);
+            Navigator.pushNamed(context, Routes.account);
           },
         ),
         ListTile(
           leading: Icon(Icons.favorite),
           title: Text('Saved', style: TextStyle(fontFamily: 'Montserrat'),),
           onTap: () {
-            showToast("Saved", context);
+            //showToast("Saved", context);
+            Navigator.pushNamed(context, Routes.saved);
           },
         ),
         ListTile(
           leading: Icon(Icons.folder),
           title: Text('Applications', style: TextStyle(fontFamily: 'Montserrat'),),
           onTap: () {
-            showToast("Applications", context);
+            //showToast("Applications", context);
+            Navigator.pushNamed(context, Routes.applications);
           },
         ),
         ListTile(
@@ -53,12 +58,15 @@ class HomeDrawer extends StatelessWidget{
             showToast("Notifications", context);
           },
         ),
+
         Divider(),
+
         ListTile(
           leading: Icon(Icons.settings),
           title: Text('Settings', style: TextStyle(fontFamily: 'Montserrat'),),
           onTap: () {
-            showToast("Settings", context);
+            //showToast("Settings", context);
+            Navigator.pushNamed(context, Routes.settings);
           },
         ),
         ListTile(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
 
 import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/list_item/category_card.dart';
 import 'package:job_portal/list_item/featured_card.dart';
 import 'package:job_portal/utils/categories.dart';
 import 'package:job_portal/utils/jobs.dart';
+import 'package:job_portal/activity/search.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage>{
+  SearchPage _searchPage = SearchPage();
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,11 @@ class _HomePageState extends State<HomePage>{
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {
-              Toast.show("Search", context, duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+            onPressed: () async {
+              //Toast.show("Search", context, duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+              await showSearch(
+                context: context,
+                delegate: _searchPage);
             },
           )
         ],

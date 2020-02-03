@@ -4,7 +4,7 @@ import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/list_item/other_jobs_card.dart';
 import 'package:job_portal/utils/jobdesc.dart';
 import 'package:job_portal/utils/jobs.dart';
-import 'package:job_portal/activity/company_profile.dart';
+import 'package:job_portal/utils/routes.dart';
 
 class JobDetailPage extends StatefulWidget{
 
@@ -43,6 +43,22 @@ class _JobDetailPageState extends State<JobDetailPage>{
 
           otherJobs(),
 
+          Padding( // This list won't scroll if i put it in otherJobs()
+            padding: EdgeInsets.only(right: 10, left: 10),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: jobs.map((value){
+                  return OtherJobsCard(
+                    img: "${value["img"]}",
+                    name: "${value["name"]}",
+                    company: "${value["comapany_name"]}",
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+
           SizedBox(height: 30)
         ],
       )
@@ -59,7 +75,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
 
           Container( // Company Logo
             child: Image.asset(
-              'assets/it_software.jpg',
+              'assets/codex_logo.png',
               width: MediaQuery.of(context).size.height / 8,
               height: MediaQuery.of(context).size.height / 8,
               fit: BoxFit.cover,
@@ -188,7 +204,8 @@ class _JobDetailPageState extends State<JobDetailPage>{
               color: Colors.blue,
               textColor: Colors.white,
               onPressed: () {
-                showToast("Apply", context);
+                //showToast("Apply", context);
+                Navigator.pushNamed(context, Routes.apply);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -305,13 +322,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
       child: FlatButton(
         onPressed: () {
           //showToast("Company Profile", context);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context){
-                return CompanyProfilePage();
-              }
-            )
-          );
+          Navigator.pushNamed(context, Routes.companyProfile);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -323,7 +334,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
         ),
       ),
     );
-}
+  }
 
   Widget otherJobs(){
     return Container(
@@ -342,27 +353,6 @@ class _JobDetailPageState extends State<JobDetailPage>{
           ),
 
           SizedBox(height: 10),
-
-          Container(
-            height: 150,
-            child: ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: jobs == null ? 0 : jobs.length,
-              itemBuilder: (BuildContext context, int index) {
-                Map job = jobs[index];
-                return Padding(
-                  padding: EdgeInsets.only(right: 10.0),
-                  child: OtherJobsCard(
-                    img: job["img"],
-                    name: job["name"],
-                    company: job["company_name"],
-                  )
-                );
-              },
-            ),
-          ),
 
         ],
       )

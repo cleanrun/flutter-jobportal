@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:job_portal/widgets/custom_widgets.dart';
-import 'package:job_portal/activity/job_detail.dart';
+import 'package:job_portal/utils/routes.dart';
 
 // Used in home.dart
 
@@ -24,13 +24,7 @@ class _FeaturedCardState extends State<FeaturedCard>{
     return InkWell(
       onTap: () {
         //showToast(widget.name, context);
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context){
-              return JobDetailPage();
-            }
-          )
-        );
+        Navigator.pushNamed(context, Routes.jobDetail);
       },
       child: Padding(
         padding: EdgeInsets.only(top: 5.0),
