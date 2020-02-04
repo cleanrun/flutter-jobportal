@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/list_item/other_jobs_card.dart';
-import 'package:job_portal/utils/jobdesc.dart';
-import 'package:job_portal/utils/jobs.dart';
+import 'package:job_portal/utils/jobdesc_list.dart';
+import 'package:job_portal/utils/job_list.dart';
 import 'package:job_portal/utils/routes.dart';
 
 class JobDetailPage extends StatefulWidget{

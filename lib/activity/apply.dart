@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:job_portal/utils/jobdesc.dart';
+import 'package:job_portal/utils/jobdesc_list.dart';
 import 'package:job_portal/utils/routes.dart';
 import 'package:job_portal/widgets/custom_widgets.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:job_portal/utils/jobs.dart';
+import 'package:job_portal/utils/job_list.dart';
 
 class SearchPage extends SearchDelegate<String>{
   

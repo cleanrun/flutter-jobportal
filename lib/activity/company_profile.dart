@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:job_portal/utils/jobs.dart';
+import 'package:job_portal/utils/job_list.dart';
 import 'package:job_portal/list_item/company_jobs_card.dart';
 
 class CompanyProfilePage extends StatefulWidget{

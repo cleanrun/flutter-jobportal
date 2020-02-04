@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:job_portal/activity/account.dart';
 import 'package:job_portal/activity/applications.dart';
 import 'package:job_portal/activity/apply.dart';
+import 'package:job_portal/activity/categories.dart';
 import 'package:job_portal/activity/company_profile.dart';
 import 'package:job_portal/activity/home.dart';
 import 'package:job_portal/activity/job_detail.dart';
@@ -27,6 +28,7 @@ class Routes {
   static const String messages = 'messagespage';
   static const String applications = '/applicationspage';
   static const String settings = '/settingspage';
+  static const String categories = '/categoriespage';
 
   // The map used to define our routes, need to be supplied to [MaterialApp]
   static Map<String, WidgetBuilder> getRoutes() {
@@ -43,6 +45,7 @@ class Routes {
      Routes.messages: (context) => MessagesPage(),
      Routes.applications: (context) => ApplicationsPage(),
      Routes.settings: (context) => SettingsPage(),
+     Routes.categories: (context) => CategoriesPage(),
    };
   }
 }

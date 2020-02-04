@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/list_item/category_card.dart';
 import 'package:job_portal/list_item/featured_card.dart';
-import 'package:job_portal/utils/categories.dart';
-import 'package:job_portal/utils/jobs.dart';
+import 'package:job_portal/utils/category_list.dart';
+import 'package:job_portal/utils/job_list.dart';
+import 'package:job_portal/utils/routes.dart';
 import 'package:job_portal/activity/search.dart';
 
 class HomePage extends StatefulWidget{
@@ -66,7 +67,8 @@ class _HomePageState extends State<HomePage>{
                     style: TextStyle(color: Theme.of(context).accentColor),
                   ),
                   onPressed: () {
-                    showToast("See all", context);
+                    //showToast("See all", context);
+                    Navigator.pushNamed(context, Routes.categories);
                   },
                 ),
               ],
