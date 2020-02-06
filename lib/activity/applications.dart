@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:job_portal/utils/job_list.dart';
+import 'package:job_portal/dummy_data/job_list.dart';
 import 'package:job_portal/list_item/applications_card.dart';
 
 class ApplicationsPage extends StatefulWidget{

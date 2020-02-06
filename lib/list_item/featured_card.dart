@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:job_portal/activity/job_detail.dart';
 
+import 'package:job_portal/models/beer.dart';
+import 'package:job_portal/utils/route_arguments.dart';
 import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/utils/routes.dart';
 
-// Used in home.dart
-
 class FeaturedCard extends StatefulWidget{
-  final String img;
-  final String name;
-  final String desc;
-  final String salary;
+  //final String img;
+  //final String name;
+  //final String desc;
+  //final String salary;
+
+  final Beer beer;
 
   @override
   _FeaturedCardState createState() => _FeaturedCardState();
 
-  FeaturedCard({Key key, @required this.img, @required this.name, @required this.desc, @required this.salary})
+  FeaturedCard({Key key, @required this.beer})
       : super(key: key);
 }
 
@@ -24,7 +27,13 @@ class _FeaturedCardState extends State<FeaturedCard>{
     return InkWell(
       onTap: () {
         //showToast(widget.name, context);
-        Navigator.pushNamed(context, Routes.jobDetail);
+        //Navigator.pushNamed(context, Routes.jobDetail, arguments: JobDetailArguments(widget.beer.id));
+        Navigator.push(context,
+          MaterialPageRoute(
+            builder: (_) => JobDetailPage(
+              id: widget.beer.id,
+            )
+        ));
       },
       child: Padding(
         padding: EdgeInsets.only(top: 5.0),
@@ -41,7 +50,8 @@ class _FeaturedCardState extends State<FeaturedCard>{
                   padding: EdgeInsets.only(left: 10),
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundImage: AssetImage(widget.img),
+                    //backgroundImage: AssetImage(widget.img),
+                    backgroundImage: NetworkImage(widget.beer.image_url),
                     backgroundColor: Colors.transparent,
                   ),
                 ),
@@ -59,7 +69,7 @@ class _FeaturedCardState extends State<FeaturedCard>{
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 1.4,
                         child: Text( // Job Name TextView
-                          widget.name,
+                          widget.beer.name,
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 15,
@@ -80,7 +90,7 @@ class _FeaturedCardState extends State<FeaturedCard>{
                           ),
 
                           Text(
-                            widget.salary,
+                            widget.beer.id.toString(),
                             style: TextStyle(
                                 fontSize: 10,
                                 fontFamily: 'Montserrat',
@@ -95,7 +105,7 @@ class _FeaturedCardState extends State<FeaturedCard>{
                       SizedBox(
                         width: MediaQuery.of(context).size.width / 1.4,
                         child: Text( // Job Description TextView
-                          widget.desc,
+                          widget.beer.tagline,
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 12,

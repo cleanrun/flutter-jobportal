@@ -1,19 +1,41 @@
 import 'package:flutter/material.dart';
 
+import 'package:job_portal/models/beer.dart';
+import 'package:job_portal/models/job.dart';
+import 'package:job_portal/repository/beer_repository.dart';
+import 'package:job_portal/repository/job_repository.dart';
+import 'package:job_portal/utils/route_arguments.dart';
 import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/list_item/other_jobs_card.dart';
-import 'package:job_portal/utils/jobdesc_list.dart';
-import 'package:job_portal/utils/job_list.dart';
+import 'package:job_portal/dummy_data/job_list.dart';
 import 'package:job_portal/utils/routes.dart';
 
 class JobDetailPage extends StatefulWidget{
+  final int id;
 
   @override
   _JobDetailPageState createState() => _JobDetailPageState();
 
+  JobDetailPage({Key key, @required this.id}) : super(key: key);
 }
 
 class _JobDetailPageState extends State<JobDetailPage>{
+  Future<Beer> beer;
+  Future<Job> job;
+
+  JobRepository calls;
+
+  @override
+  void initState() {
+    super.initState();
+    calls = JobRepository();
+    beer = getBeer(widget.id);
+    job = calls.getJob(1); // Still using certain index, in this case : 1
+  }
+
+  Future getData() async{
+    var result = await getBeer(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,45 +49,74 @@ class _JobDetailPageState extends State<JobDetailPage>{
           },
         ),
       ),
-      body: ListView(
-        children: <Widget>[
-          companyInfo(),
-
-          actionButtons(),
-
-          jobDescription(),
-
-          jobRequirements(),
-
-          companyProfile(),
-
-          Divider(),
-
-          otherJobs(),
-
-          Padding( // This list won't scroll if i put it in otherJobs()
-            padding: EdgeInsets.only(right: 10, left: 10),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: jobs.map((value){
-                  return OtherJobsCard(
-                    img: "${value["img"]}",
-                    name: "${value["name"]}",
-                    company: "${value["comapany_name"]}",
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-
-          SizedBox(height: 30)
-        ],
-      )
+      body: FutureBuilder<Job>(
+        future: job,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            if(snapshot.hasError){
+              print('build: Loading error');
+              return Center(
+                child: Text(
+                  snapshot.error.toString(),
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.3,
+                ),
+              );
+            }
+            else{
+              print(snapshot.data.company[0].company);
+              print(snapshot.data.job_name);
+              return contents(snapshot.data);
+            }
+          }
+          else{
+            print('build: loading the data');
+            return loadingPage();
+          }
+        },
+      ),
     );
   }
 
-  Widget companyInfo(){
+  Widget contents(Job job){
+    return ListView(
+      children: <Widget>[
+        companyInfo(job),
+
+        actionButtons(job),
+
+        jobDescription(job),
+
+        jobRequirements(job),
+
+        companyProfile(),
+
+        Divider(),
+
+        otherJobs(),
+
+        Padding( // This list won't scroll if i put it in otherJobs()
+          padding: EdgeInsets.only(right: 10, left: 10),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: jobs.map((value){
+                return OtherJobsCard(
+                  img: "${value["img"]}",
+                  name: "${value["name"]}",
+                  company: "${value["comapany_name"]}",
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+
+        SizedBox(height: 30)
+      ],
+    );
+  }
+
+  Widget companyInfo(Job job){
     return Container(
       //alignment:Alignment.center,
       padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
@@ -92,7 +143,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
               SizedBox(
                 width: MediaQuery.of(context).size.width / 1.7,
                 child: Text( // Job Name
-                  "Mobile Developer",
+                  job.job_name,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 20,
@@ -117,7 +168,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
                   SizedBox( // Company Name
                     width: MediaQuery.of(context).size.width / 1.7,
                     child: Text(
-                      "Codex by Telkom Indonesia",
+                      job.company[0].company,
                       style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 13,
@@ -136,7 +187,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
               SizedBox(
                 width: MediaQuery.of(context).size.width / 1.7,
                 child: Text( // Job Name
-                  "IT and Software",
+                  job.category[0].name,
                   style: TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 15,
@@ -154,7 +205,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
     );
   }
 
-  Widget actionButtons(){
+  Widget actionButtons(Job job){
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height / 10,
@@ -221,7 +272,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
     );
   }
 
-  Widget jobDescription(){
+  Widget jobDescription(Job job){
     return Container(
       padding: EdgeInsets.fromLTRB(8, 5, 8, 0),
       child: Card(
@@ -248,7 +299,9 @@ class _JobDetailPageState extends State<JobDetailPage>{
                   Container(
                     width: MediaQuery.of(context).size.width*0.85,
                     child: Text(
-                      '${description[0]["desc"]}',
+                      //'${description[0]["desc"]}',
+                      //beer.description,
+                      job.job_description,
                       style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 15,
@@ -267,7 +320,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
     );
   }
 
-  Widget jobRequirements(){
+  Widget jobRequirements(Job job){
     return Container(
         padding: EdgeInsets.fromLTRB(8, 5, 8, 0),
         child: Card(
@@ -294,7 +347,7 @@ class _JobDetailPageState extends State<JobDetailPage>{
                       Container(
                         width: MediaQuery.of(context).size.width*0.85,
                         child: Text(
-                          '${description[0]["req"]}',
+                          job.requirements,
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             fontSize: 15,
@@ -356,6 +409,17 @@ class _JobDetailPageState extends State<JobDetailPage>{
 
         ],
       )
+    );
+  }
+
+  Widget loadingPage() {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: MediaQuery.of(context).size.height / 2.5 ),
+          CircularProgressIndicator()
+        ],
+      ),
     );
   }
 }

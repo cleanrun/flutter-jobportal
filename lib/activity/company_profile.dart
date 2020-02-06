@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:job_portal/utils/job_list.dart';
+import 'package:job_portal/models/company.dart';
+import 'package:job_portal/repository/company_repository.dart';
+import 'package:job_portal/dummy_data/job_list.dart';
 import 'package:job_portal/list_item/company_jobs_card.dart';
 
 class CompanyProfilePage extends StatefulWidget{
@@ -10,6 +12,17 @@ class CompanyProfilePage extends StatefulWidget{
 }
 
 class _CompanyProfilePageState extends State<CompanyProfilePage>{
+  Future<Company> company;
+
+  CompanyRepository calls;
+
+  @override
+  void initState() {
+    super.initState();
+    calls = CompanyRepository();
+    company = calls.getCompany(1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,31 +39,60 @@ class _CompanyProfilePageState extends State<CompanyProfilePage>{
 
       //extendBodyBehindAppBar: true,
 
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-        child: ListView(
-          children: <Widget>[
-            companyDetails(),
-
-            jobsList(),
-
-            Column(
-              children: jobs.map((value){
-                return CompanyJobsCard(
-                  name: "${value["name"]}",
-                );
-              }).toList(),
-            ),
-
-            SizedBox(height: 30)
-
-          ],
-        ),
+      body: FutureBuilder<Company>(
+        future: company,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            if(snapshot.hasError){
+              print('build: Loading error');
+              return Center(
+                child: Text(
+                  snapshot.error.toString(),
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.3,
+                ),
+              );
+            }
+            else{
+              print(snapshot.data.company);
+              print(snapshot.data.location);
+              return contents(snapshot.data);
+            }
+          }
+          else{
+            print('build: loading the data');
+            return loadingPage();
+          }
+        },
       )
     );
   }
 
-  Widget companyDetails(){
+  Widget contents(Company company){
+    return Padding(
+      padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+      child: ListView(
+        children: <Widget>[
+          companyDetails(company),
+
+          jobsList(),
+
+          Column(
+            children: jobs.map((value){
+              return CompanyJobsCard(
+                name: "${value["name"]}",
+              );
+            }).toList(),
+          ),
+
+          SizedBox(height: 30)
+
+        ],
+      ),
+    );
+  }
+
+  Widget companyDetails(Company company){
     return Wrap(
       direction: Axis.vertical,
       children: <Widget>[
@@ -72,7 +114,8 @@ class _CompanyProfilePageState extends State<CompanyProfilePage>{
           child: Wrap(
             children: <Widget>[
               Text(
-                "Codex by Telkom Indonesia",
+                //"Codex by Telkom Indonesia",
+                company.company,
                 style: TextStyle(
                     color: Colors.blueGrey,
                     fontFamily: 'Montserrat',
@@ -109,7 +152,8 @@ class _CompanyProfilePageState extends State<CompanyProfilePage>{
                         Icon(Icons.location_on, size: 15),
                         SizedBox(width: 5),
                         Text(
-                          "Jakarta, Indonesia",
+                          //"Jakarta, Indonesia",
+                          company.location,
                           style: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 14,
@@ -147,7 +191,8 @@ class _CompanyProfilePageState extends State<CompanyProfilePage>{
                         Icon(Icons.web, size: 15),
                         SizedBox(width: 5),
                         Text(
-                          "https://codex.works",
+                          //"https://codex.works",
+                          company.web_address,
                           style: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 14,
@@ -185,7 +230,8 @@ class _CompanyProfilePageState extends State<CompanyProfilePage>{
                     Container( // Overview
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Text(
-                        "Codex is Telkom Indonesia’s initiative with one main goal, to deliver high quality digital product as innovation enablement, by using Lean, Agile, and Squad Framework.",
+                        //"Codex is Telkom Indonesia’s initiative with one main goal, to deliver high quality digital product as innovation enablement, by using Lean, Agile, and Squad Framework.",
+                        company.overview,
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 15,
@@ -224,6 +270,17 @@ class _CompanyProfilePageState extends State<CompanyProfilePage>{
 
           SizedBox(height: 10),
 
+        ],
+      ),
+    );
+  }
+
+  Widget loadingPage() {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: MediaQuery.of(context).size.height / 2.5 ),
+          CircularProgressIndicator()
         ],
       ),
     );
