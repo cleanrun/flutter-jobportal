@@ -7,7 +7,6 @@ import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/list_item/popular_category_card.dart';
 import 'package:job_portal/list_item/featured_card.dart';
 import 'package:job_portal/dummy_data/category_list.dart';
-import 'package:job_portal/dummy_data/job_list.dart';
 import 'package:job_portal/utils/routes.dart';
 import 'package:job_portal/activity/search.dart';
 
@@ -115,7 +114,7 @@ class _HomePageState extends State<HomePage>{
               ),
             ),
 
-            SizedBox(height: 10),
+            SizedBox(height: 15),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,16 +127,6 @@ class _HomePageState extends State<HomePage>{
                     fontWeight:FontWeight.w800,
                     fontFamily: 'Montserrat',
                   ),
-                ),
-
-                FlatButton( // See All Button
-                  child: Text(
-                    "See all",
-                    style: TextStyle(color: Theme.of(context).accentColor),
-                  ),
-                  onPressed: () {
-                    showToast("See all", context);
-                  },
                 ),
               ],
             ),

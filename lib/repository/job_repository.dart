@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:job_portal/models/job.dart';
+import 'package:job_portal/utils/constants.dart';
 
 class JobRepository{
-  final String mainUrl = "http://apijob.surveypuspa.com/api/job-detail/";
+  final String mainUrl = Constants.parentUrl + "job-detail/";
 
   Future<Stream<Job>> getJobs() async{
     final client = new http.Client();

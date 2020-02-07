@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:job_portal/activity/home.dart';
+import 'package:job_portal/activity/login.dart';
 import 'package:job_portal/utils/routes.dart';
 
 void main() => runApp(MainApp());
@@ -11,7 +12,7 @@ class MainApp extends StatelessWidget{
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: Routes.getRoutes(),
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }

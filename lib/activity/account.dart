@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:job_portal/activity/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:job_portal/widgets/custom_widgets.dart';
 import 'package:job_portal/utils/routes.dart';
@@ -219,7 +222,8 @@ class _AccountPageState extends State<AccountPage>{
             leading: Icon(Icons.exit_to_app),
             title: Text('Log out', style: TextStyle(fontFamily: 'Montserrat'),),
             onTap: () {
-              showToast("Log out", context);
+              //showToast("Log out", context);
+              logOut();
             },
           ),
 
@@ -236,5 +240,11 @@ class _AccountPageState extends State<AccountPage>{
         ],
       ),
     );
+  }
+
+  Future logOut() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    SystemNavigator.pop();
   }
 }

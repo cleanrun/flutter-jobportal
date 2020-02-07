@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:job_portal/activity/category_detail.dart';
 import 'package:job_portal/dummy_data/category_list.dart';
 import 'package:job_portal/widgets/custom_widgets.dart';
 
@@ -36,7 +37,14 @@ class _CategoriesPageState extends State<CategoriesPage>{
           Map category = categories[index];
           return ListTile(
             onTap: () {
-              showToast(category["name"], context);
+              //showToast(category["name"], context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => CategoryDetailPage(
+                    categoryName: category["name"],
+                  )
+                )
+              );
             },
             leading: CircleAvatar(
               backgroundImage: AssetImage(category["img"]),

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
+import 'package:job_portal/activity/home.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:job_portal/widgets/custom_widgets.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -11,6 +16,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   Animation animation1, animation2, animation3;
   AnimationController animationController;
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  SharedPreferences prefs;
+
   @override
   void initState(){
     super.initState();
@@ -20,6 +30,22 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         CurvedAnimation(curve: Curves.fastLinearToSlowEaseIn, parent: animationController));
     animation2 = Tween(begin: -1.0, end: 0.0).animate(
         CurvedAnimation(curve: Interval(0.8, 1.0, curve: Curves.fastLinearToSlowEaseIn), parent: animationController));
+
+    checkLogin();
+  }
+
+  Future checkLogin() async{
+    prefs = await SharedPreferences.getInstance();
+    if(prefs.getBool("isLogin")){
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(
+            builder: (_) => HomePage(),
+          )
+      );
+    }
+    else{
+      print("Not Logged In");
+    }
   }
 
   @override
@@ -75,6 +101,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           labelStyle: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold, color: Colors.grey),
                           focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
                         ),
+                        controller: emailController,
                       ),
 
                       SizedBox(height: 20.0),
@@ -85,6 +112,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           labelStyle: TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.bold, color: Colors.grey),
                           focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue)),
                         ),
+                        controller: passwordController,
                         obscureText: true,
                       ),
 
@@ -116,7 +144,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                             color: Colors.blue,
                             elevation: 7.0,
                             child: GestureDetector(
-                              onTap: (){}, // OnClickListener
+                              onTap: (){
+                                //showToast(emailController.text, context);
+                                getLogin(emailController.text, passwordController.text);
+                              }, // OnClickListener
                               child: Center(
                                 child: Text(
                                   'Login',
@@ -203,6 +234,29 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       },
 
     );
+  }
+
+  Future getLogin(String email, String password) async{
+    prefs = await SharedPreferences.getInstance();
+
+    if(email == "example@gmail.com" && password == "password"){
+      try{
+        prefs.setBool("isLogin", true);
+        prefs.setString("email", email);
+        prefs.setString("password", password);
+
+        Navigator.pushReplacement(context,
+          MaterialPageRoute(
+            builder: (_) => HomePage(),
+          )
+        );
+      }catch(e){
+        print(e.toString());
+      }
+    }
+    else{
+      showToast("Invalid email or password.", context);
+    }
   }
 
 }
